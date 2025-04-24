@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->uuid('id_kategori_barang');
             $table->integer('stok');
+            $table->integer('stok_awal');
             $table->BigInteger('harga');
             $table->BigInteger('hpp');
             $table->string('status')->default('Aktif');

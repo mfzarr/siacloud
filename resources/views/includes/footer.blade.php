@@ -18,5 +18,7 @@
 <script src="{{ asset('assets/js/plugins/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/buttons.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/data-export-custom.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
+<script src="{{ asset('assets/js/pages/chart-apex.js') }}"></script> --}}
 <!-- Sweetalert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

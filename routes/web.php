@@ -45,6 +45,7 @@ Route::get('/', function () {
 
 // Dashboard route
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
+// API route for sales data
 Route::get('/api/sales-data', [DashboardController::class, 'getSalesData'])->name('api.sales-data');
 // Registration routes
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');

@@ -2,91 +2,46 @@
 $(document).ready(function() {
     setTimeout(function() {
         $(function() {
-            // Function to fetch sales data
-            function fetchSalesData(year) {
-                return $.ajax({
-                    url: '/api/sales-data',
-                    method: 'GET',
-                    data: { year: year },
-                    dataType: 'json'
-                });
-            }
-
-            // Function to update chart
-            function updateChart(year) {
-                fetchSalesData(year).then(function(data) {
-                    var options = {
-                        chart: {
-                            height: 300,
-                            type: 'line',
-                            zoom: {
-                                enabled: false
-                            }
-                        },
-                        dataLabels: {
-                            enabled: false,
-                            width: 2,
-                        },
-                        stroke: {
-                            curve: 'straight',
-                        },
-                        colors: ["#4680ff"],
-                        series: [{
-                            name: "Penjualan",
-                            data: data.sales
-                        }],
-                        title: {
-                            text: 'Penjualan Berdasarkan Bulan ' + year,
-                            align: 'left'
-                        },
-                        grid: {
-                            row: {
-                                colors: ['#f3f6ff', 'transparent'],
-                                opacity: 0.5
-                            },
-                        },
-                        xaxis: {
-                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                        }
+            var options = {
+                chart: {
+                    height: 300,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
                     }
-
-                    // Clear previous chart
-                    document.querySelector("#line-chart-1").innerHTML = '';
-
-                    var chart = new ApexCharts(
-                        document.querySelector("#line-chart-1"),
-                        options
-                    );
-                    chart.render();
-                });
-            }
-
-            // Create year selector if it doesn't exist
-            if (!document.getElementById('yearSelector')) {
-                var currentYear = new Date().getFullYear();
-                var yearSelector = document.createElement('select');
-                yearSelector.id = 'yearSelector';
-                yearSelector.className = 'form-control mb-3';
-                yearSelector.style.width = '200px';
-                
-                for (var i = currentYear; i >= currentYear - 5; i--) {
-                    var option = document.createElement('option');
-                    option.value = i;
-                    option.textContent = i;
-                    yearSelector.appendChild(option);
+                },
+                dataLabels: {
+                    enabled: false,
+                    width: 2,
+                },
+                stroke: {
+                    curve: 'straight',
+                },
+                colors: ["#4680ff"],
+                series: [{
+                    name: "Desktops",
+                    data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                }],
+                title: {
+                    text: 'Product Trends by Month',
+                    align: 'left'
+                },
+                grid: {
+                    row: {
+                        colors: ['#f3f6ff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
                 }
-                
-                document.querySelector("#line-chart-1").parentNode.insertBefore(yearSelector, document.querySelector("#line-chart-1"));
             }
 
-            // Initial chart render
-            updateChart(new Date().getFullYear());
-
-            // Update chart when year is changed
-            document.getElementById('yearSelector').addEventListener('change', function() {
-                var selectedYear = parseInt(this.value);
-                updateChart(selectedYear);
-            });
+            var chart = new ApexCharts(
+                document.querySelector("#line-chart-1"),
+                options
+            );
+            chart.render();
         });
         $(function() {
             var lastDate = 0;

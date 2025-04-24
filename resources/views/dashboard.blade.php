@@ -19,48 +19,119 @@
             </div>
         </div>
         <!-- [ breadcrumb ] end -->
+        
+        <!-- [ Filter Section ] start -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Filter Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="filter-form" method="GET" action="{{ route('dashboard') }}">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Tipe Filter</label>
+                                        <select class="form-control" id="filterType" name="filterType" onchange="toggleFilterType()">
+                                            <option value="month" {{ isset($filterType) && $filterType == 'month' ? 'selected' : '' }}>Bulan</option>
+                                            <option value="range" {{ isset($filterType) && $filterType == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-8" id="monthFilterContainer" style="{{ !isset($filterType) || $filterType == 'month' ? '' : 'display: none;' }}">
+                                    <div class="form-group">
+                                        <label>Pilih Bulan</label>
+                                        <input type="month" class="form-control" id="month" name="month" 
+                                            value="{{ isset($currentYear) && isset($currentMonth) ? $currentYear . '-' . str_pad($currentMonth, 2, '0', STR_PAD_LEFT) : now()->format('Y-m') }}" 
+                                            onchange="document.getElementById('filter-form').submit();">
+                                    </div>
+                                </div>
+                                <div class="col-md-8" id="rangeFilterContainer" style="{{ isset($filterType) && $filterType == 'range' ? '' : 'display: none;' }}">
+                                    <div class="form-group">
+                                        <label>Rentang Tanggal</label>
+                                        <input type="text" class="form-control" id="dateFilter" name="dateFilter" 
+                                            value="{{ isset($dateFilter) ? $dateFilter : '' }}" 
+                                            placeholder="Pilih rentang tanggal">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ Filter Section ] end -->
+        
         <!-- [ Main Content ] start -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card support-bar overflow-hidden">
                     <div class="card-body pb-0">
-                        <thead class="custom-table">
-                            <tr>
-                                <h1 class="lg-6">Ringkasan Transaksi</h1>
-                            </tr>
-                            <div class="row">
-                                <div class="col-md-12 col-xl-4">
-                                    <div class="card bg-c-green order-card">
-                                        <div class="card-body">
-                                            <h6 class="text-white">Total Penjualan</h6>
-                                            <h2 class="text-white">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
-                                            <p class="m-b-0">Bulan Ini</p>
-                                            <i class="card-icon fas fa-money-check-alt"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-xl-4">
-                                    <div class="card bg-c-yellow order-card">
-                                        <div class="card-body">
-                                            <h6 class="text-white">Pesanan Diterima</h6>
-                                            <h2 class="text-white">{{ $totalKuantitas }}</h2>
-                                            <p class="m-b-0">Total Kuantitas Bulan Ini</p>
-                                            <i class="card-icon fas fa-shopping-cart"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-xl-4">
-                                    <div class="card bg-c-blue order-card">
-                                        <div class="card-body">
-                                            <h6 class="text-white">Total Pendapatan</h6>
-                                            <h2 class="text-white">Rp {{ number_format($totalSales, 0, ',', '.') }}</h2>
-                                            <p class="m-b-0">Total Penjualan - HPP Bulan Ini</p>
-                                            <i class="card-icon fas fa-gift"></i>
-                                        </div>
+                        <h1 class="lg-6">Ringkasan Transaksi</h1>
+                        <div class="row">
+                            <div class="col-md-12 col-xl-4">
+                                <div class="card bg-c-green order-card">
+                                    <div class="card-body">
+                                        <h6 class="text-white">Total Penjualan</h6>
+                                        <h2 class="text-white">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
+                                        <p class="m-b-0">Periode Terpilih</p>
+                                        <i class="card-icon fas fa-money-check-alt"></i>
                                     </div>
                                 </div>
                             </div>
-                        </thead>
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card bg-c-yellow order-card">
+                                    <div class="card-body">
+                                        <h6 class="text-white">Pesanan Diterima</h6>
+                                        <h2 class="text-white">{{ $totalKuantitas }}</h2>
+                                        <p class="m-b-0">Total Kuantitas Periode Terpilih</p>
+                                        <i class="card-icon fas fa-shopping-cart"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card bg-c-blue order-card">
+                                    <div class="card-body">
+                                        <h6 class="text-white">Total Pendapatan</h6>
+                                        <h2 class="text-white">Rp {{ number_format($totalSales, 0, ',', '.') }}</h2>
+                                        <p class="m-b-0">Total Penjualan - HPP Periode Terpilih</p>
+                                        <i class="card-icon fas fa-gift"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chart Section -->
+        <div class="row">
+            <!-- Pie Chart -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Top 5 Produk Terjual</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="pie-chart">
+                            {!! $salesChart->container() !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Line Chart -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Tren Penjualan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="line-chart">
+                            {!! $lineChart->container() !!}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -68,88 +139,76 @@
         <!-- [ Main Content ] end -->
     </div>
 </div>
-<!-- Button trigger modal -->
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-body position-relative">
-                <button type="button" class="close position-absolute" style="top: 15px; right: 15px;"
-                    data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="text-center">
-                    <h3 class="mt-3">SIACLOUD<span class="text-primary">Perusahaan Dagang</span><sup>v1.0</sup></h3>
-                </div>
-
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner text-center">
-                        <div class="carousel-item active" data-interval="50000">
-                            <img src="{{ asset('assets/images/logosia.png') }}"
-                                class="img-fluid my-4" style="max-width: 300px;" alt="images">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-10">
-                                    <div class="text-center">
-                                        <h4 class="mb-3">Fitur</h4>
-                                        <p class="mb-2 f-16">
-                                            <i class="feather icon-check-circle mr-2 text-primary"></i>
-                                            Pencatatan Transaksi Keuangan
-                                        </p>
-                                        <p class="mb-2 f-16">
-                                            <i class="feather icon-check-circle mr-2 text-primary"></i>
-                                            Penyusutan Aset
-                                        </p>
-                                        <p class="mb-2 f-16">
-                                            <i class="feather icon-check-circle mr-2 text-primary"></i>
-                                            Manajemen stok barang
-                                        </p>
-                                        <p class="mb-2 f-16">
-                                            <i class="feather icon-check-circle mr-2 text-primary"></i>
-                                            Jurnal Umum
-                                        </p>
-                                        <p class="mb-2 f-16">
-                                            <i class="feather icon-check-circle mr-2 text-primary"></i>
-                                            Laporan Keuangan
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="carousel-item" data-interval="50000">
-                            <img src="assets/images/model/able-admin.jpg" class="img-fluid mt-0" alt="images">
-                        </div>
-                    </div>
-                </div>
-
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"
-                    style="transform: rotate(180deg); margin-bottom: -1px;">
-                    <path class="elementor-shape-fill" fill="#4680ff" opacity="0.33"
-                        d="M473,67.3c-203.9,88.3-263.1-34-320.3,0C66,119.1,0,59.7,0,59.7V0h1000v59.7 c0,0-62.1,26.1-94.9,29.3c-32.8,3.3-62.8-12.3-75.8-22.1C806,49.6,745.3,8.7,694.9,4.7S492.4,59,473,67.3z"></path>
-                    <path class="elementor-shape-fill" fill="#4680ff" opacity="0.66"
-                        d="M734,67.3c-45.5,0-77.2-23.2-129.1-39.1c-28.6-8.7-150.3-10.1-254,39.1 s-91.7-34.4-149.2,0C115.7,118.3,0,39.8,0,39.8V0h1000v36.5c0,0-28.2-18.5-92.1-18.5C810.2,18.1,775.7,67.3,734,67.3z"></path>
-                    <path class="elementor-shape-fill" fill="#4680ff"
-                        d="M766.1,28.9c-200-57.5-266,65.5-395.1,19.5C242,1.8,242,5.4,184.8,20.6C128,35.8,132.3,44.9,89.9,52.5C28.6,63.7,0,0,0,0 h1000c0,0-9.9,40.9-83.6,48.1S829.6,47,766.1,28.9z"></path>
-                </svg>
-
-                <div class="modal-body text-center bg-primary py-4">
-                    <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    </ol>
-                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="ml-2">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <span class="mr-2">Next</span>
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/moment.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/daterangepicker.js') }}"></script>
+{!! $salesChart->script() !!}
+{!! $lineChart->script() !!}
+
+<script>
+    function toggleFilterType() {
+        const filterType = document.getElementById('filterType').value;
+        const monthContainer = document.getElementById('monthFilterContainer');
+        const rangeContainer = document.getElementById('rangeFilterContainer');
+        
+        if (filterType === 'month') {
+            monthContainer.style.display = '';
+            rangeContainer.style.display = 'none';
+        } else {
+            monthContainer.style.display = 'none';
+            rangeContainer.style.display = '';
+        }
+    }
+    
+    $(document).ready(function() {
+        // Initialize daterangepicker
+        $('#dateFilter').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear',
+                format: 'YYYY-MM-DD'
+            },
+            ranges: {
+               'Hari Ini': [moment(), moment()],
+               'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+               '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+               'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+               'Bulan Lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        });
+        
+        // Handle apply event
+        $('#dateFilter').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#filter-form').submit();
+        });
+        
+        // Handle cancel event
+        $('#dateFilter').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    });
+</script>
+@endpush
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('assets/css/plugins/daterangepicker.css') }}">
+<style>
+    .card-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 30px;
+        opacity: 0.3;
+    }
+    
+    .order-card {
+        position: relative;
+        overflow: hidden;
+    }
+</style>
+@endpush
