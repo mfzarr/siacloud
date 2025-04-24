@@ -1,0 +1,81 @@
+/* Ensure the month picker is positioned relative to its parent container */
+.input-container {
+    position: relative;
+}
+
+.month-picker {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    display: none;
+    color: black;
+    z-index: 1050;
+    width: 100%; /* Match the width of the parent container */
+    max-width: 300px; /* Adjust as needed */
+    left: 0; /* Align with the left of the parent */
+}
+
+.month-picker.above {
+    bottom: 100%;  /* Position above the input field */
+    top: auto;
+}
+
+.month-picker.below {
+    top: 100%;  /* Position below the input field */
+    bottom: auto;
+}
+
+/* Rest of your existing CSS remains the same */
+.year-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.year-selector button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.month {
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    background: #ddd;
+    transition: 0.3s;
+}
+
+.month:hover, .month.active {
+    background: #6200ea;
+    color: white;
+}
+
+.select-this-month {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    background: #ccc;
+    color: black;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.select-this-month:hover {
+    background: #6200ea;
+    color: white;
+}
