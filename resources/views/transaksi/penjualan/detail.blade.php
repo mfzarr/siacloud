@@ -44,7 +44,7 @@
                         </p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Dicatat oleh:</strong> {{ $penjualan->userRelation->username ?? 'N/A' }}</p>
+                        <p><strong>Dicatat oleh:</strong> {{ $penjualan->userRelation->name ?? 'N/A' }}</p>
                     </div>
                 </div>
 

@@ -70,7 +70,7 @@
                                         <td>{{ $item->no_transaksi_penjualan }}</td>
                                         <td>{{ $item->tgl_transaksi }}</td>
                                         <td>{{ $item->pelangganRelation->nama ?? 'N/A' }}</td>
-                                        <td>{{ $item->userRelation->username ?? 'N/A' }}</td>
+                                        <td>{{ $item->userRelation->name ?? 'N/A' }}</td>
                                         <td>Rp{{ number_format($item->total) }}</td>
                                         <td>{{ $item->discount }}%</td>
                                         <td>

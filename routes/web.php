@@ -1,37 +1,39 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\InputKodePerusahaanController;
-use App\Http\Controllers\MenampilkanPerusahaanController;
-use App\Http\Controllers\PerusahaanController;
-use App\Http\Controllers\Masterdata\CoaController;
-use App\Http\Controllers\Masterdata\CoaKelompokController;
-use App\Http\Controllers\Masterdata\RolesController;
-use App\Http\Controllers\Masterdata\PelangganController;
-use App\Http\Controllers\Masterdata\SupplierController;
-use App\Http\Controllers\Masterdata\KaryawanController;
-use App\Http\Controllers\Masterdata\JabatanController;
-use App\Http\Controllers\Masterdata\UsersController;
-use App\Http\Controllers\Masterdata\JasaController;
-use App\Http\Controllers\Transaksi\PembelianController;
-use App\Http\Controllers\Transaksi\PembeliandetailController;
-use App\Http\Controllers\Masterdata\AssetController;
-use App\Http\Controllers\Masterdata\Kategori_barangController;
-use App\Http\Controllers\Masterdata\ProdukController;
-use App\Http\Controllers\Masterdata\Barang1Controller;
-use App\Http\Controllers\Laporan\JurnalUmumController;
-use App\Http\Controllers\Masterdata\DiscountController;
-use App\Http\Controllers\Transaksi\PenjualanController;
-use App\Http\Controllers\Transaksi\PresensiController;
-use App\Http\Controllers\Transaksi\PenggajianController;
-use App\Http\Controllers\Transaksi\BebanController;
-use App\Http\Controllers\Laporan\LaporanLabaRugiController;
-use App\Http\Controllers\Laporan\LaporanNeracaController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Laporan\LaporanPerubahanModalController;
-use App\Http\Controllers\Laporan\LaporanCashFlowController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PerusahaanController;
+use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\Masterdata\CoaController;
+use App\Http\Controllers\Masterdata\JasaController;
+use App\Http\Controllers\Transaksi\BebanController;
+use App\Http\Controllers\Masterdata\AssetController;
+use App\Http\Controllers\Masterdata\RolesController;
+use App\Http\Controllers\Masterdata\UsersController;
+use App\Http\Controllers\Masterdata\ProdukController;
+use App\Http\Controllers\Auth\RoleSelectionController;
+use App\Http\Controllers\Laporan\JurnalUmumController;
+use App\Http\Controllers\Masterdata\Barang1Controller;
+use App\Http\Controllers\Masterdata\JabatanController;
+use App\Http\Controllers\Transaksi\PresensiController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Masterdata\DiscountController;
+use App\Http\Controllers\Masterdata\KaryawanController;
+use App\Http\Controllers\Masterdata\SupplierController;
+use App\Http\Controllers\Transaksi\PembelianController;
+use App\Http\Controllers\Transaksi\PenjualanController;
+use App\Http\Controllers\Masterdata\PelangganController;
+use App\Http\Controllers\Transaksi\PenggajianController;
+use App\Http\Controllers\Laporan\LaporanNeracaController;
+use App\Http\Controllers\MenampilkanPerusahaanController;
+use App\Http\Controllers\Masterdata\CoaKelompokController;
+use App\Http\Controllers\Laporan\LaporanCashFlowController;
+use App\Http\Controllers\Laporan\LaporanLabaRugiController;
+use App\Http\Controllers\Auth\InputKodePerusahaanController;
+use App\Http\Controllers\Transaksi\PembeliandetailController;
+use App\Http\Controllers\Masterdata\Kategori_barangController;
+use App\Http\Controllers\Laporan\LaporanPerubahanModalController;
 
 // Auth routes
 Auth::routes();
@@ -48,6 +50,13 @@ Route::get('/api/sales-data', [DashboardController::class, 'getSalesData'])->nam
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
+// Role selection routes
+Route::middleware('auth')->group(function () {
+    Route::get('/role-selection', [RoleSelectionController::class, 'showRoleSelectionForm'])
+        ->name('role-selection');
+    Route::post('/role-selection', [RoleSelectionController::class, 'handleRoleSelection'])
+        ->name('handle-role-selection');
+});
 // Perusahaan routes
 Route::middleware('auth')->group(function () {
     Route::get('/registrasiperusahaan', [PerusahaanController::class, 'showCreateForm'])
@@ -189,3 +198,6 @@ Route::middleware('role:owner')->group(function () {
     Route::post('presensi/presensi/create-exit-time/{date}/{id}', [PresensiController::class, 'createExitTime'])->name('presensi.presensi.createExitTime');
     Route::post('presensi/create-exit-time/{date}/{id}', [PresensiController::class, 'createExitTime'])->name('presensi.createExitTime');
 });
+
+Route::get('/auth/redirect', [SocialiteController::class, 'redirect']);
+Route::get('/auth/google/callback', [SocialiteController::class, 'callback']);

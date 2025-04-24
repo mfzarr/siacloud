@@ -48,7 +48,7 @@
                                             <td>{{ $perusahaan->alamat }}</td>
                                             <td>{{ $perusahaan->jenis_perusahaan }}</td>
                                             <td>{{ $perusahaan->kode_perusahaan }}</td>
-                                            <td>{{ $perusahaan->owner->username }}</td>
+                                            <td>{{ $perusahaan->owner->name }}</td>
                                             <td>{{ $perusahaan->owner->email }}</td>
                                         </tr>
                                     </tbody>

@@ -24,13 +24,15 @@ return new class extends Migration {
         // Tabel users
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username', 50)->unique();
+            $table->string('google_id')->nullable();
+            $table->string('google_token')->nullable();
+            $table->string('google_refresh_token')->nullable();
+            $table->string('name', 50)->unique();
             $table->string('email', 50)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role', 50);
+            $table->string('role', 50)->nullable(); 
             $table->string('status', 50)->default('aktif')->nullable();
-            $table->string('detail', 50)->nullable();
 
             // Foreign key must reference the correct type and column
             $table->unsignedBigInteger('id_perusahaan')->nullable(); // Ensure it's nullable

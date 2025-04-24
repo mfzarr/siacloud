@@ -34,7 +34,7 @@ class UsersController extends Controller
     {
         $request->validate([
             'id_perusahaan' => 'required|exists:perusahaan,id_perusahaan',
-            'username' => 'required|string|max:255|unique:users,username',
+            'name' => 'required|string|max:255|unique:users,name',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'id_role' => 'required|exists:user_role,id_role',
@@ -44,7 +44,7 @@ class UsersController extends Controller
 
         User::create([
             'id_perusahaan' => $request->id_perusahaan,
-            'username' => $request->username,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'id_role' => $request->id_role,
@@ -68,7 +68,7 @@ class UsersController extends Controller
     {
         $request->validate([
             'id_perusahaan' => 'required|exists:perusahaan,id_perusahaan',
-            'username' => 'required|string|max:255|unique:users,username,' . $id,
+            'name' => 'required|string|max:255|unique:users,name,' . $id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:8|confirmed',
             'id_role' => 'required|exists:user_role,id_role',
@@ -77,7 +77,7 @@ class UsersController extends Controller
         ]);
 
         $user = User::findOrFail($id);
-        $user->username = $request->username;
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->id_perusahaan = $request->id_perusahaan;
         $user->id_role = $request->id_role;

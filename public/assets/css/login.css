@@ -1,0 +1,120 @@
+/* assets/css/login.css */
+/* Main Login Styles */
+/* .auth-wrapper {
+    min-height: 100vh;
+}
+
+.auth-side-img {
+    background: linear-gradient(135deg, #1e5799 0%,#207cca 51%,#2989d8 100%);
+    padding: 2rem;
+    justify-content: center;
+}
+
+.auth-side-form {
+    background: #fff;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.auth-content {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.floating-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #495057;
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 4px;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+
+.btn-primary {
+    background-color: #4680ff;
+    border-color: #4680ff;
+    padding: 10px 15px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #3a6fd3;
+    border-color: #3a6fd3;
+} */
+
+/* Divider Styles */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+    color: #6c757d;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.divider::before {
+    margin-right: 0.5rem;
+}
+
+.divider::after {
+    margin-left: 0.5rem;
+}
+
+/* Google Button Styles */
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    color: #757575;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.google-btn:hover {
+    background-color: #f8f9fa;
+    border-color: #ccc;
+    text-decoration: none;
+}
+
+.google-btn i {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #DB4437;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .auth-side-img {
+        display: none;
+    }
+    
+    .auth-side-form {
+        width: 100%;
+        padding: 1.5rem;
+    }
+}

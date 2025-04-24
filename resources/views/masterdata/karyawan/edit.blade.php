@@ -46,7 +46,7 @@
                                         @foreach ($users as $user)
                                             <option value="{{ $user->id }}"
                                                 {{ $karyawan->id_user == $user->id ? 'selected' : '' }}>
-                                                {{ $user->id }} - {{ $user->username }}
+                                                {{ $user->id }} - {{ $user->name }}
                                             </option>
                                         @endforeach
                                     </select>

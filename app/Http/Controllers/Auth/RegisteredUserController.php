@@ -30,9 +30,9 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // Validate the input including password confirmation and role selection
+        // Validate the input including password confirmation
         $request->validate([
-            'username' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
             'password' => [
                 'required',
@@ -42,28 +42,21 @@ class RegisteredUserController extends Controller
                     ->mixedCase()
                     ->numbers()
             ],
-            'role' => ['required', 'string', 'in:owner,pegawai'],
         ]);
 
         // Create the new user and hash the password
         $user = User::create([
-            'username' => $request->username,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role, // Save role correctly
+            'role' => null, // Role will be set later
         ]);
 
         // Fire the registered event and log in the user
         event(new Registered($user));
         Auth::login($user);
 
-        // Redirect based on role
-        if ($user->role === 'owner') {
-            // Redirect owners to the Perusahaan registration form
-            return redirect()->route('registrasi-perusahaan');
-        } else {
-            // Redirect pegawai to the input kode perusahaan form
-            return redirect()->route('input-kode-perusahaan');
-        }
+        // Redirect to role selection page
+        return redirect()->route('role-selection');
     }
 }

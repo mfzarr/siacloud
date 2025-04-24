@@ -15,7 +15,7 @@ class User extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'id_perusahaan', 'username', 'email', 'password', 'id_role', 'status', 'detail'
+        'id_perusahaan', 'name', 'email', 'password', 'id_role', 'status', 'detail'
     ];
 
     public function perusahaan()

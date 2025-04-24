@@ -19,10 +19,10 @@
                         </select>
                     </div>
 
-                    <!-- Username -->
+                    <!-- Usenamername -->
                     <div class="form-group">
-                        <label for="username" class="col-form-label">Username:</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                        <label for="name" class="col-form-label">Username:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
 
                     <!-- Email -->

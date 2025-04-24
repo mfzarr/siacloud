@@ -41,7 +41,7 @@
                                 <select class="form-control @error('id_user') is-invalid @enderror" id="id_user" name="id_user">
                                     <option value="">Belum Terdaftar</option>
                                     @foreach($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->id }} - {{ $user->username }}</option>
+                                        <option value="{{ $user->id }}">{{ $user->id }} - {{ $user->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('id_user')

@@ -60,7 +60,7 @@
                                             <td>{{ $item->nama }}</td>
                                             {{-- <td>{{ $item->jabatan }}</td> --}}
                                             <td>{{ $item->nama_role }}</td>
-                                            <td>{{ $item->username }}</td>
+                                            <td>{{ $item->name }}</td>
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->status }}</td>
                                             <td>{{ $item->detail }}</td>

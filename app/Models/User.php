@@ -16,11 +16,14 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
+        'name',
         'email',
         'password',
         'role',  // Role can be either 'owner' or 'employee'
         'id_perusahaan',  // Foreign key to the 'perusahaan' table
+        'google_id',
+        'google_token',
+        'google_refresh_token',
     ];
 
     /**

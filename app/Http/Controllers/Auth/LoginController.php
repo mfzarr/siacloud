@@ -20,7 +20,7 @@ class LoginController extends Controller
         $password = $request->input('password');
         $remember = $request->has('remember');
     
-        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
     
         $credentials = [
             $fieldType => $loginField,

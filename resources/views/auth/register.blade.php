@@ -33,11 +33,11 @@
                     <form method="POST" action="{{ route('register') }}" id="registerForm">
                         @csrf <!-- CSRF Protection -->
 
-                        <!-- Username -->
+                        <!-- name -->
                         <div class="form-group mb-3">
-                            <label class="floating-label" for="Username">Username</label>
-                            <input type="text" class="form-control @error('username') is-invalid @enderror" id="Username" name="username" placeholder="" required>
-                            @error('username')
+                            <label class="floating-label" for="name">Username</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="" required>
+                            @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -72,19 +72,7 @@
                             <input type="password" class="form-control" id="PasswordConfirm" name="password_confirmation" placeholder="" required>
                         </div>
 
-                        <!-- Role Selection -->
-                        <div class="form-group mb-3">
-                            <label class="floating-label" for="Role">Role</label>
-                            <select class="form-control @error('role') is-invalid @enderror" id="Role" name="role" required>
-                                <option value="owner">Owner</option>
-                                <option value="pegawai">Pegawai</option>
-                            </select>
-                            @error('role')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                        <!-- Role Selection has been removed -->
 
                         <button type="submit" class="btn btn-primary btn-block mb-4">Daftar</button>
                         <p class="mb-2">Already have an account? <a href="{{ route('login') }}" class="f-w-400">Signin</a></p>

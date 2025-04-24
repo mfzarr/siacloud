@@ -6,11 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="">
-    <meta name="author" content="Phoenixcoded" />
     <link rel="icon" href="assets/images/logosia.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
@@ -63,7 +62,15 @@
                         <button type="submit" class="btn btn-block btn-primary mb-4">Masuk</button>
                     
                         <p class="mb-2 text-muted">Lupa password? <a href="{{ route('password.request') }}" class="f-w-400">Reset</a></p>
-                        <p class="mb-0 text-muted">Belum punya akun? <a href="{{ route('register') }}" class="f-w-400">Signup</a></p>
+                        <p class="mb-2 text-muted">Belum punya akun? <a href="{{ route('register') }}" class="f-w-400">Signup</a></p>
+
+                        <!-- OR Divider -->
+                        <div class="divider">OR</div>
+
+                        <!-- Google Login Button -->
+                        <a href="auth/redirect" class="google-btn mb-4">
+                            <i class="fab fa-google"></i> Continue with Google
+                        </a>
                     </form>
                 </div>
             </div>
@@ -104,25 +111,25 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-        const loginInput = document.getElementById('login');
-        const passwordInput = document.getElementById('Password');
-        const rememberCheckbox = document.getElementById('rememberCredentials');
+            const loginInput = document.getElementById('login');
+            const passwordInput = document.getElementById('Password');
+            const rememberCheckbox = document.getElementById('rememberCredentials');
 
-        // Check if there are saved credentials
-        if (localStorage.getItem('rememberedLogin')) {
-            loginInput.value = localStorage.getItem('rememberedLogin');
-            rememberCheckbox.checked = true;
-        }
-
-        // Save credentials when form is submitted
-        document.getElementById('loginForm').addEventListener('submit', function() {
-            if (rememberCheckbox.checked) {
-                localStorage.setItem('rememberedLogin', loginInput.value);
-            } else {
-                localStorage.removeItem('rememberedLogin');
+            // Check if there are saved credentials
+            if (localStorage.getItem('rememberedLogin')) {
+                loginInput.value = localStorage.getItem('rememberedLogin');
+                rememberCheckbox.checked = true;
             }
+
+            // Save credentials when form is submitted
+            document.getElementById('loginForm').addEventListener('submit', function() {
+                if (rememberCheckbox.checked) {
+                    localStorage.setItem('rememberedLogin', loginInput.value);
+                } else {
+                    localStorage.removeItem('rememberedLogin');
+                }
+            });
         });
-    });
     </script>
 </body>
 

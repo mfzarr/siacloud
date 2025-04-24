@@ -28,7 +28,7 @@ class DataSeeder extends Seeder
         // Seed users table
         DB::table('users')->insert([
             [
-                'username' => 'admin',
+                'name' => 'admin',
                 'email' => 'admin1@gmail.com',
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('Admin123'),
@@ -39,7 +39,7 @@ class DataSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'username' => 'karyawan',
+                'name' => 'karyawan',
                 'email' => 'karyawan1@gmail.com',
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('Admin123'),
