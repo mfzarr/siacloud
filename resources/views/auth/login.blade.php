@@ -69,7 +69,7 @@
 
                         <!-- Google Login Button -->
                         <a href="auth/redirect" class="google-btn mb-4">
-                            <i class="fab fa-google"></i> Continue with Google
+                            <img src="assets\images\auth\image.png" alt="Google Logo" style="width: 20px; height: 20px; margin-right: 8px;"> Continue with Google
                         </a>
                     </form>
                 </div>
