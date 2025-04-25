@@ -35,9 +35,9 @@
                             <form id="supplierForm" action="{{ route('supplier.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="nama">Nama <span class="text-danger">*</span></label>
+                                    <label for="nama">Nama Supplier <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                        id="nama" name="nama" value="{{ old('nama') }}" required>
+                                        id="nama" name="nama" value="{{ old('nama') }}" required placeholder="PT D'FAM Indonesia Tbk.">
                                     @error('nama')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -45,14 +45,14 @@
                                 <div class="form-group">
                                     <label for="no_telp">No Telp <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control @error('no_telp') is-invalid @enderror"
-                                        id="no_telp" name="no_telp" value="{{ old('no_telp') }}" required>
+                                        id="no_telp" name="no_telp" value="{{ old('no_telp') }}" required placeholder="08123456789">
                                     @error('no_telp')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="alamat">Alamat <span class="text-danger">*</span></label>
-                                    <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" rows="3"
+                                    <textarea placeholder="Jl. Menuju Kesuksesan" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" rows="3"
                                         required>{{ old('alamat') }}</textarea>
                                     @error('alamat')
                                         <span class="text-danger">{{ $message }}</span>
@@ -90,7 +90,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="status">Status <span class="text-danger">*</span></label>
                                     <select class="form-control @error('status') is-invalid @enderror"
                                         id="single-select-field" name="status" required>
@@ -102,7 +102,7 @@
                                     @error('status')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 <div class="text-right">
                                     <button type="button" class="btn btn-primary" id="saveButton">Save</button>
                                     <a href="{{ route('supplier.index') }}" class="btn btn-danger">Back</a>
@@ -142,11 +142,6 @@
             });
 
             if (!isValid) {
-                Swal.fire({
-                    title: "Validation Error",
-                    text: "Please fill in all required fields.",
-                    icon: "error"
-                });
                 return;
             }
 

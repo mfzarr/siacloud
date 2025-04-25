@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigInteger('asuransi')->nullable();
             $table->bigInteger('tarif')->nullable();
             // $table->integer('tarif_tidak_tetap')->nullable();   
-
+            $table->string('status')->default('Aktif');
             $table->foreignId('id_perusahaan'); // Foreign key column
             $table->foreign('id_perusahaan')->references('id_perusahaan')->on('perusahaan')->onDelete('cascade');
             

@@ -20,5 +20,10 @@
 <script src="{{ asset('assets/js/pages/data-export-custom.js') }}"></script>
 {{-- <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/chart-apex.js') }}"></script> --}}
+<!-- jquery-validation Js -->
+<script src="{{ asset('assets/js/plugins/jquery.validate.min.js') }}"></script>
+<!-- form-picker-custom Js -->
+<script src="{{ asset('assets/js/pages/form-validation.js') }}"></script>
+
 <!-- Sweetalert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

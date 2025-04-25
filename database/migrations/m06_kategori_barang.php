@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id_kategori_barang')->primary();
             $table->string('nama');
             $table->unsignedBigInteger('id_perusahaan');
+            $table->string('status')->default('Aktif');
             $table->timestamps();
 
             $table->foreign('id_perusahaan')

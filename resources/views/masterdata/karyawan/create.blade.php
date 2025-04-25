@@ -31,7 +31,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="nama">Nama <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required>
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required placeholder="Faiz">
                                 @error('nama')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -50,21 +50,21 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="faiz@gmail.com">
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>                            
                             <div class="form-group">
                                 <label for="nik">NIK <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control @error('nik') is-invalid @enderror" id="nik" name="nik" value="{{ old('nik') }}" required>
+                                <input type="number" class="form-control @error('nik') is-invalid @enderror" id="nik" name="nik" value="{{ old('nik') }}" required placeholder="1234567890123456">
                                 @error('nik')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="no_telp">No Telp <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control @error('no_telp') is-invalid @enderror" id="no_telp" name="no_telp" value="{{ old('no_telp') }}" required>
+                                <input type="number" class="form-control @error('no_telp') is-invalid @enderror" id="no_telp" name="no_telp" value="{{ old('no_telp') }}" required placeholder="081234567890">
                                 @error('no_telp')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -81,12 +81,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="alamat">Alamat <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" required>{{ old('alamat') }}</textarea>
+                                <textarea placeholder="Jl. Maju Sejahtera" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" required>{{ old('alamat') }}</textarea>
                                 @error('alamat')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="status">Status <span class="text-danger">*</span></label>
                                 <select class="form-control @error('status') is-invalid @enderror" id="status" name="status" required>
                                     <option value="aktif">Aktif</option>
@@ -95,12 +95,12 @@
                                 @error('status')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label for="id_jabatan">Jabatan <span class="text-danger">*</span></label>
                                 <select class="form-control @error('id_jabatan') is-invalid @enderror" id="id_jabatan" name="id_jabatan" required>
                                     <option value="">-- Pilih Jabatan --</option>
-                                    @foreach($jabatans as $jabatan)
+                                    @foreach($jabatans->where('status', 'Aktif') as $jabatan)
                                     <option value="{{ $jabatan->id_jabatan }}">{{ $jabatan->nama }}</option>
                                     @endforeach
                                 </select>
@@ -161,11 +161,6 @@
         });
 
         if (!isValid) {
-            Swal.fire({
-                title: "Validation Error",
-                text: "Please fill in all required fields.",
-                icon: "error"
-            });
             return;
         }
 

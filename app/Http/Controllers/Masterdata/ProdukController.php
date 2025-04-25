@@ -36,7 +36,10 @@ class ProdukController extends Controller
     public function create()
     {
         $id_perusahaan = Auth::user()->id_perusahaan;
-        $kategori_barang = Kategori_barang::where('id_perusahaan', $id_perusahaan)->get();
+        $kategori_barang = Kategori_barang::where('id_perusahaan', $id_perusahaan)
+                        ->where('status', 'Aktif')
+                        ->get();
+
         return view('masterdata.produk.create', compact('kategori_barang'));
     }
 
@@ -61,15 +64,14 @@ class ProdukController extends Controller
             'stok' => 'required|string',
             'harga' => 'required|string',
             'hpp' => 'required|string',
-            'status' => 'required',
         ]);
 
         $stok = str_replace('.', '', $request->stok);
         $harga = str_replace('.', '', $request->harga);
         $hpp = str_replace('.', '', $request->hpp);
-    
+
         $id_perusahaan = Auth::user()->id_perusahaan;
-    
+
         $produk = Produk::create([
             'nama' => $request->nama,
             'id_kategori_barang' => $request->id_kategori_barang,
@@ -77,31 +79,30 @@ class ProdukController extends Controller
             'stok_awal' => $stok, // Add this line
             'harga' => $harga,
             'hpp' => $hpp,
-            'status' => $request->status,
             'id_perusahaan' => $id_perusahaan,
         ]);
-    
+
         $id_produk = $produk->id_produk;
         $stok_awal = $request->stok;
         $bulan = date('Y-m-01');
-    
+
         $stok_masuk = DB::table('pembelian_detail')
             ->where('id_produk', $id_produk)
             ->whereMonth('created_at', date('m'))
             ->whereYear('created_at', date('Y'))
             ->sum('qty');
-    
+
         $stok_keluar = DB::table('penjualan_detail')
             ->where('id_produk', $id_produk)
             ->whereMonth('created_at', date('m'))
             ->whereYear('created_at', date('Y'))
             ->sum('kuantitas');
-    
+
         $stok_akhir = $stok_awal - $stok_keluar;
-    
+
         // Generate a UUID for id_stok_produk
         $id_stok_produk = Str::uuid();
-    
+
         DB::table('stok_produk')->insert([
             'id_stok_produk' => $id_stok_produk, // Add this line
             'id_produk' => $id_produk,
@@ -112,7 +113,7 @@ class ProdukController extends Controller
             'bulan' => $bulan,
             'id_perusahaan' => $id_perusahaan,
         ]);
-    
+
         return redirect()->route('produk.index')->with('success', 'Produk created successfully.');
     }
 
@@ -123,7 +124,10 @@ class ProdukController extends Controller
     {
         $id_perusahaan = Auth::user()->id_perusahaan;
         $produk = Produk::where('id_perusahaan', $id_perusahaan)->findOrFail($id);
-        $kategori_barang = Kategori_barang::where('id_perusahaan', $id_perusahaan)->get();
+        $kategori_barang = Kategori_barang::where('id_perusahaan', $id_perusahaan)
+                ->where('status', 'Aktif')
+                ->get();
+
         return view('masterdata.produk.edit', compact('produk', 'kategori_barang'));
     }
 
@@ -138,7 +142,6 @@ class ProdukController extends Controller
             'stok' => 'required|string',
             'harga' => 'required|string',
             'hpp' => 'required|string',
-            'status' => 'required',
         ]);
 
         //konversi input
@@ -152,7 +155,6 @@ class ProdukController extends Controller
             'stok' => $stok,
             'harga' => $harga,
             'hpp' => $hpp,
-            'status' => $request->status,
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk updated successfully.');
@@ -193,7 +195,7 @@ class ProdukController extends Controller
     {
         $id_perusahaan = Auth::user()->id_perusahaan;
         $produk = Produk::where('id_perusahaan', $id_perusahaan)->findOrFail($id_produk);
-    
+
         // Ambil data pembelian
         $pembelian = DB::table('pembelian_detail')
             ->join('pembelian', 'pembelian_detail.id_pembelian', '=', 'pembelian.id_pembelian')
@@ -201,7 +203,7 @@ class ProdukController extends Controller
             ->where('pembelian.id_perusahaan', $id_perusahaan)
             ->select('pembelian.tanggal_pembelian as tanggal', 'pembelian_detail.qty as jumlah', DB::raw('"Pembelian" as tipe'))
             ->get();
-    
+
         // Ambil data penjualan
         $penjualan = DB::table('penjualan_detail')
             ->join('penjualan', 'penjualan_detail.id_penjualan', '=', 'penjualan.id_penjualan')
@@ -209,10 +211,10 @@ class ProdukController extends Controller
             ->where('penjualan.id_perusahaan', $id_perusahaan)
             ->select('penjualan.tgl_transaksi as tanggal', 'penjualan_detail.kuantitas as jumlah', DB::raw('"Penjualan" as tipe'))
             ->get();
-    
+
         // Gabungkan data pembelian dan penjualan
         $log = $pembelian->concat($penjualan)->sortBy('tanggal');
-    
+
         // Hitung perubahan stok
         $stok_akhir = $produk->stok_awal;
         $perubahan_stok = [];
@@ -232,7 +234,7 @@ class ProdukController extends Controller
                 'stok_akhir' => $stok_akhir
             ];
         }
-    
+
         return view('masterdata.produk.log', compact('produk', 'perubahan_stok'));
     }
 
@@ -244,4 +246,25 @@ class ProdukController extends Controller
         return view('masterdata.produk.kartu_stok', compact('produk'));
     }
 
+    /**
+     * Update the status of the specified produk.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Aktif,Tidak Aktif',
+        ]);
+
+        $produk = Produk::where('id_perusahaan', Auth::user()->id_perusahaan)
+            ->findOrFail($id);
+
+        $produk->status = $request->status;
+        $produk->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status produk berhasil diperbarui',
+            'status' => $produk->status
+        ]);
+    }
 }

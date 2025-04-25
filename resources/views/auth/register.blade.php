@@ -11,6 +11,7 @@
     <meta name="author" content="Phoenixcoded" />
     <link rel="icon" href="assets/images/logosia.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/login.css">
 </head>
 
 <body>
@@ -76,6 +77,13 @@
 
                         <button type="submit" class="btn btn-primary btn-block mb-4">Daftar</button>
                         <p class="mb-2">Already have an account? <a href="{{ route('login') }}" class="f-w-400">Signin</a></p>
+
+                        <div class="divider">OR</div>
+
+                        <!-- Google Login Button -->
+                        <a href="auth/redirect" class="google-btn mb-4">
+                            <img src="assets\images\auth\image.png" alt="Google Logo" style="width: 20px; height: 20px; margin-right: 8px;"> Continue with Google
+                        </a>
                     </form>
                 </div>
             </div>

@@ -84,11 +84,6 @@
             });
 
             if (!isValid) {
-                Swal.fire({
-                    title: "Validation Error",
-                    text: "Please fill in all required fields.",
-                    icon: "error"
-                });
                 return;
             }
 

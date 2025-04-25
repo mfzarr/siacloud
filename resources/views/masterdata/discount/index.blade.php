@@ -38,28 +38,42 @@
                                     <table id="simpletable" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                {{-- <th>no</th> --}}
                                                 <th>Minimum Transaksi</th>
                                                 <th>Persentasi Diskon</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- <?php
-                                            $no = 1;
-                                            ?> --}}
                                             @foreach ($discounts as $diskon)
                                                 <tr>
-                                                    {{-- <td>{{$no++}}</td> --}}
                                                     <td>{{ $diskon->min_transaksi }}</td>
                                                     <td>{{ $diskon->discount_percentage }}%</td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="custom-control custom-switch mr-3">
+                                                                <input type="checkbox" class="custom-control-input status-switch" 
+                                                                    id="statusSwitch{{ $diskon->id_discount }}" 
+                                                                    data-id="{{ $diskon->id_discount }}"
+                                                                    {{ $diskon->status === 'Aktif' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" 
+                                                                    for="statusSwitch{{ $diskon->id_discount }}">
+                                                                </label>
+                                                            </div>
+                                                            @if ($diskon->status === 'Aktif')
+                                                                <span class="badge badge-success">Aktif</span>
+                                                            @else
+                                                                <span class="badge badge-danger">Tidak Aktif</span>
+                                                            @endif
+                                                        </div>
+                                                    </td>
                                                     <td>
                                                         <a href="{{ route('diskon.edit', $diskon->id_discount) }}"
                                                             class="btn btn-info btn-sm"><i
                                                                 class="feather icon-edit"></i>&nbsp;Edit</a>
                                                         <form id="delete-form-{{ $diskon->id_discount }}"
                                                             action="{{ route('diskon.destroy', $diskon->id_discount) }}"
-                                                            method="POST" style="display:inline;">
+                                                            method="POST" style="display:{{ $diskon->status === 'Aktif' ? 'none' : 'inline' }};">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger btn-sm">
@@ -82,6 +96,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Delete confirmation
             document.querySelectorAll('form[id^="delete-form-"]').forEach(function (form) {
                 form.addEventListener('submit', function (e) {
                     e.preventDefault();
@@ -98,6 +113,89 @@
                         if (result.isConfirmed) {
                             form.submit();
                         }
+                    });
+                });
+            });
+
+            // Status switch functionality
+            document.querySelectorAll('.status-switch').forEach(function(switchEl) {
+                switchEl.addEventListener('change', function() {
+                    const diskonId = this.getAttribute('data-id');
+                    const isChecked = this.checked;
+                    const badgeContainer = this.closest('td').querySelector('.badge');
+                    
+                    // Show loading indicator
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Sedang mengubah status diskon',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Send AJAX request to update status
+                    fetch(`/diskon/${diskonId}/update-status`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            status: isChecked ? 'Aktif' : 'Tidak Aktif'
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update the badge
+                        if (isChecked) {
+                            badgeContainer.className = 'badge badge-success';
+                            badgeContainer.textContent = 'Aktif';
+                            
+                            // Hide delete button if status is Aktif
+                            const row = this.closest('tr');
+                            const deleteForm = row.querySelector(`form[id^="delete-form-"]`);
+                            if (deleteForm) {
+                                deleteForm.style.display = 'none';
+                            }
+                        } else {
+                            badgeContainer.className = 'badge badge-danger';
+                            badgeContainer.textContent = 'Tidak Aktif';
+                            
+                            // Show delete button if status is Tidak Aktif
+                            const row = this.closest('tr');
+                            const deleteForm = row.querySelector(`form[id^="delete-form-"]`);
+                            if (deleteForm) {
+                                deleteForm.style.display = 'inline';
+                            }
+                        }
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: `Status diskon berhasil diubah menjadi ${isChecked ? 'Aktif' : 'Tidak Aktif'}`,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        
+                        // Revert the switch to its previous state
+                        this.checked = !isChecked;
+                        
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: 'Terjadi kesalahan saat mengubah status diskon'
+                        });
                     });
                 });
             });

@@ -24,7 +24,7 @@
                         <!-- Nama Perusahaan -->
                         <div class="form-group mb-3">
                             <label class="floating-label" for="nama">Nama Perusahaan</label>
-                            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" placeholder="Enter Company Name" required>
+                            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" placeholder="PT D'FAM Indonesia Tbk." required>
                             @error('nama')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -35,7 +35,7 @@
                         <!-- Alamat Perusahaan -->
                         <div class="form-group mb-3">
                             <label class="floating-label" for="alamat">Alamat Perusahaan</label>
-                            <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" placeholder="Enter Company Address" required>
+                            <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" placeholder="Jl. Menuju Kesuksesan" required>
                             @error('alamat')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

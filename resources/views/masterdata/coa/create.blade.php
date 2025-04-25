@@ -31,7 +31,7 @@
                         <div class="form-group">
                             <label for="kode_akun">Kode Akun: <span class="text-danger">*</span></label>
                             <input type="number" class="form-control @error('kode_akun') is-invalid @enderror"
-                                id="kode_akun" name="kode_akun" value="{{ old('kode_akun') }}" required>
+                                id="kode_akun" name="kode_akun" value="{{ old('kode_akun') }}" required placeholder="1234">
                             @error('kode_akun')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <label for="nama_akun">Nama Akun: <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('nama_akun') is-invalid @enderror"
-                                id="nama_akun" name="nama_akun" value="{{ old('nama_akun') }}" required>
+                                id="nama_akun" name="nama_akun" value="{{ old('nama_akun') }}" required placeholder="Kas">
                             @error('nama_akun')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -76,7 +76,7 @@
                             <input type="text" class="form-control @error('saldo_awal') is-invalid @enderror"
                                 id="saldo_awal" name="saldo_awal_display"
                                 value="{{ old('saldo_awal_display', old('saldo_awal') ? number_format(old('saldo_awal'), 0, ',', '.') : '') }}"
-                                required>
+                                required placeholder="1.000.000">
                             <input type="hidden" id="saldo_awal_actual" name="saldo_awal" value="{{ old('saldo_awal') }}">
                             @error('saldo_awal')
                                 <span class="text-danger">{{ $message }}</span>
@@ -174,11 +174,6 @@
             });
 
             if (!isValid) {
-                Swal.fire({
-                    title: "Validation Error",
-                    text: "Please fill in all required fields.",
-                    icon: "error"
-                });
                 return;
             }
 

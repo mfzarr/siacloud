@@ -94,18 +94,22 @@ Route::middleware('auth')->group(function () {
 
     // Pelanggan routes
     Route::resource('pelanggan', PelangganController::class);
+    Route::post('/pelanggan/{pelanggan}/update-status', [App\Http\Controllers\Masterdata\PelangganController::class, 'updateStatus'])->name('pelanggan.updateStatus');
 
     // Supplier routes
     Route::resource('supplier', SupplierController::class);
 
     // Karyawan routes
-    Route::resource('pegawai', KaryawanController::class)->middleware('role:owner');;
+    Route::resource('pegawai', KaryawanController::class)->middleware('role:owner');
+    Route::post('/pegawai/{id}/update-status', [App\Http\Controllers\Masterdata\KaryawanController::class, 'updateStatus']);
 
     // Jabatan routes
-    Route::resource('jabatan', JabatanController::class)->middleware('role:owner');;
+    Route::resource('jabatan', JabatanController::class)->middleware('role:owner');
+    Route::post('/jabatan/{id}/update-status', [App\Http\Controllers\Masterdata\JabatanController::class, 'updateStatus']);
 
     // Users routes
     Route::resource('users', UsersController::class);
+    Route::post('/supplier/{id}/update-status', [App\Http\Controllers\Masterdata\SupplierController::class, 'updateStatus'])->name('supplier.update-status');
 
     // Jasa routes
     Route::resource('jasa', JasaController::class);
@@ -117,16 +121,19 @@ Route::middleware('auth')->group(function () {
 
     // Katetgori Barang Routes
     Route::resource('kategori-produk', Kategori_barangController::class);
+    Route::post('/kategori-produk/{id}/update-status', [App\Http\Controllers\Masterdata\Kategori_barangController::class, 'updateStatus'])->name('kategori-produk.update-status');
 
     // Produk routes
     Route::resource('produk', ProdukController::class);
     Route::get('/kartu-stok/{id_produk}', [ProdukController::class, 'getProductLog'])->name('produk.log');
+    Route::post('/produk/{id}/update-status', [App\Http\Controllers\Masterdata\ProdukController::class, 'updateStatus'])->name('produk.update-status');
 
     // Barang1 routes
     Route::resource('barang', Barang1Controller::class);
 
     // Discount routes
     Route::resource('diskon', DiscountController::class);
+    Route::post('/diskon/{id}/update-status', [App\Http\Controllers\Masterdata\DiscountController::class, 'updateStatus'])->name('diskon.update-status');
 });
 
 // Transaksi routes

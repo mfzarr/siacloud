@@ -44,7 +44,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="tarif">Tarif Tetap<span class="text-danger">*</span></label>
+                            <label for="tarif">Gaji<span class="text-danger">*</span></label>
                             <input type="text" id="tarif" class="form-control @error('tarif') is-invalid @enderror"
                                 value="{{ old('tarif', number_format($jabatan->tarif, 0, ',', '.')) }}" required>
                             <input type="hidden" name="tarif" id="tarif_hidden" value="{{ old('tarif', $jabatan->tarif) }}">
@@ -100,11 +100,6 @@
             });
 
             if (!isValid) {
-            Swal.fire({
-                title: "Validation Error",
-                text: "Please fill in all required fields.",
-                icon: "error"
-            });
             return;
             }
 

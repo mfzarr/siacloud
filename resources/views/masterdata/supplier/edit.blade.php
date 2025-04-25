@@ -95,7 +95,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="status">Status <span class="text-danger">*</span></label>
                                     <select class="form-control @error('status') is-invalid @enderror"
                                         id="single-select-field" name="status" required>
@@ -109,7 +109,7 @@
                                     @error('status')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 <div class="text-right">
                                     <button type="button" class="btn btn-primary" id="saveButton">Save</button>
                                     <a href="{{ route('supplier.index') }}" class="btn btn-danger">Back</a>
@@ -149,11 +149,6 @@
             });
 
             if (!isValid) {
-                Swal.fire({
-                    title: "Validation Error",
-                    text: "Please fill in all required fields.",
-                    icon: "error"
-                });
                 return;
             }
 

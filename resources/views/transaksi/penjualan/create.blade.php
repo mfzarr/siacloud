@@ -130,7 +130,7 @@
                                                 required>
                                                 <option value="">Select Pegawai</option>
                                                 @foreach ($pegawai as $item)
-                                                    @if ($item->status == 'aktif')
+                                                    @if ($item->status == 'Aktif')
                                                         <option value="{{ $item->id_karyawan }}">{{ $item->nama }}
                                                         </option>
                                                     @endif

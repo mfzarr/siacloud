@@ -8,8 +8,9 @@ return new class extends Migration {
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->uuid('id_discount')->primary();
-            $table->integer('min_transaksi')->unique(); // Minimum transactions
+            $table->integer('min_transaksi'); // Minimum transactions
             $table->integer('discount_percentage');    // Discount in percentage
+            $table->string('status')->default('Aktif');
             $table->foreignId('id_perusahaan'); // Foreign key column
             $table->foreign('id_perusahaan')->references('id_perusahaan')->on('perusahaan')->onDelete('cascade');
             $table->timestamps();

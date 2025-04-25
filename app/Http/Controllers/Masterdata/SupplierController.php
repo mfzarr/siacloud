@@ -29,7 +29,6 @@ class SupplierController extends Controller
             'nama' => 'required|max:50',
             'alamat' => 'required|max:50',
             'no_telp' => 'required|max:50',
-            'status' => 'required|in:Aktif,Tidak Aktif',
             'products' => 'array',
         ]);
 
@@ -37,7 +36,6 @@ class SupplierController extends Controller
             'nama' => $request->nama,
             'alamat' => $request->alamat,
             'no_telp' => $request->no_telp,
-            'status' => $request->status,
             'id_perusahaan' => Auth::user()->id_perusahaan,
         ]);
 
@@ -63,7 +61,6 @@ class SupplierController extends Controller
             'nama' => 'required|max:50',
             'alamat' => 'required|max:50',
             'no_telp' => 'required|max:50',
-            'status' => 'required|in:Aktif,Tidak Aktif',
             'products' => 'array',
         ]);
 
@@ -74,7 +71,6 @@ class SupplierController extends Controller
             'nama' => $request->nama,
             'alamat' => $request->alamat,
             'no_telp' => $request->no_telp,
-            'status' => $request->status,
         ]);
 
         $supplier->products()->sync($request->products ?? []);
@@ -90,5 +86,27 @@ class SupplierController extends Controller
         $supplier->delete();
 
         return redirect()->route('supplier.index')->with('success', 'Supplier deleted successfully.');
+    }
+
+    /**
+     * Update the status of the specified supplier.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Aktif,Tidak Aktif',
+        ]);
+
+        $supplier = Supplier::where('id_perusahaan', Auth::user()->id_perusahaan)
+            ->findOrFail($id);
+
+        $supplier->status = $request->status;
+        $supplier->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status supplier berhasil diperbarui',
+            'status' => $supplier->status
+        ]);
     }
 }

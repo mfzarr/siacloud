@@ -31,7 +31,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="nama">Nama Produk <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required>
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required placeholder="Ciki Enak">
                                 @error('nama')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -52,7 +52,7 @@
 
                             <div class="form-group">
                                 <label for="stok">Stok <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control @error('stok') is-invalid @enderror" id="stok" name="stok" value="{{ old('stok') }}" required>
+                                <input type="number" class="form-control @error('stok') is-invalid @enderror" id="stok" name="stok" value="{{ old('stok') }}" required placeholder="100">
                                 @error('stok')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -60,7 +60,7 @@
 
                             <div class="form-group">
                                 <label for="harga">Harga Jual <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control format-number @error('harga') is-invalid @enderror" id="harga" name="harga" value="{{ old('harga') }}" required>
+                                <input type="text" class="form-control format-number @error('harga') is-invalid @enderror" id="harga" name="harga" value="{{ old('harga') }}" required placeholder="10.000">
                                 @error('harga')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -68,19 +68,8 @@
                             
                             <div class="form-group">
                                 <label for="hpp">HPP <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control format-number @error('hpp') is-invalid @enderror" id="hpp" name="hpp" value="{{ old('hpp') }}" required>
+                                <input type="text" class="form-control format-number @error('hpp') is-invalid @enderror" id="hpp" name="hpp" value="{{ old('hpp') }}" required placeholder="5.000">
                                 @error('hpp')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="status">Status <span class="text-danger">*</span></label>
-                                <select class="form-control @error('status') is-invalid @enderror" id="status" name="status" required>
-                                    <option value="Aktif" {{ old('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
-                                    <option value="Tidak Aktif" {{ old('status') == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-                                </select>
-                                @error('status')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -134,11 +123,6 @@
         });
 
         if (!isValid) {
-            Swal.fire({
-                title: "Validation Error",
-                text: "Please fill in all required fields.",
-                icon: "error"
-            });
             return;
         }
 

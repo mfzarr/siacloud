@@ -45,8 +45,9 @@ class presensiController extends Controller
     
         // Get the list of karyawans for this company who haven't been recorded for today
         $karyawans = Karyawan::where('id_perusahaan', $perusahaanId)
+            ->where('status', 'Aktif')
             ->whereDoesntHave('presensi', function ($query) use ($today) {
-                $query->where('tanggal_presensi', $today);
+            $query->where('tanggal_presensi', $today);
             })
             ->get();
     

@@ -28,28 +28,28 @@
                     @csrf
                     <div class="form-group">
                         <label for="nama_asset">Nama Aset <span class="text-danger">*</span></label>
-                        <input type="text" name="nama_asset" class="form-control @error('nama_asset') is-invalid @enderror" required>
+                        <input type="text" name="nama_asset" class="form-control @error('nama_asset') is-invalid @enderror" required placeholder="Mobil" value="{{ old('nama_asset') }}">
                         @error('nama_asset')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="harga_perolehan">Harga Perolehan<span class="text-danger">*</span></label>
-                        <input type="text" name="harga_perolehan" id="harga_perolehan" class="form-control @error('harga_perolehan') is-invalid @enderror" required>
+                        <input type="text" name="harga_perolehan" id="harga_perolehan" class="form-control @error('harga_perolehan') is-invalid @enderror" required placeholder="250.000.000">
                         @error('harga_perolehan')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="nilai_sisa">Nilai Sisa<span class="text-danger">*</span></label>
-                        <input type="text" name="nilai_sisa" id="nilai_sisa" class="form-control @error('nilai_sisa') is-invalid @enderror"required>
+                        <input type="text" name="nilai_sisa" id="nilai_sisa" class="form-control @error('nilai_sisa') is-invalid @enderror"required placeholder="10.000.000">
                         @error('nilai_sisa')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="masa_manfaat">Masa Manfaat (Tahun) <span class="text-danger">*</span></label>
-                        <input type="number" name="masa_manfaat" class="form-control @error('masa_manfaat') is-invalid @enderror" required>
+                        <input type="number" name="masa_manfaat" class="form-control @error('masa_manfaat') is-invalid @enderror" required placeholder="5">
                         @error('masa_manfaat')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -123,11 +123,6 @@
         });
 
         if (!isValid) {
-            Swal.fire({
-                title: "Validation Error",
-                text: "Please fill in all required fields.",
-                icon: "error"
-            });
             return;
         }
 

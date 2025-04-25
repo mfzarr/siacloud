@@ -37,5 +37,10 @@ class Kategori_barang extends Model
     {
         return $this->belongsTo(Perusahaan::class, 'id_perusahaan');
     }
+
+    public function produk()
+    {
+        return $this->hasMany(Produk::class, 'id_kategori_barang', 'id_kategori_barang');
+    }
     
 }

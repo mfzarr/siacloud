@@ -31,22 +31,22 @@
                             <form id="pelangganForm" action="{{ route('pelanggan.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="nama">Nama <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required>
+                                    <label for="nama">Nama Pelanggan <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required placeholder="Faiz">
                                     @error('nama')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="faiz@gmail.com">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="no_telp">No Telp <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control @error('no_telp') is-invalid @enderror" id="no_telp" name="no_telp" value="{{ old('no_telp') }}" required>
+                                    <input type="number" class="form-control @error('no_telp') is-invalid @enderror" id="no_telp" name="no_telp" value="{{ old('no_telp') }}" required placeholder="08123456789">
                                     @error('no_telp')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -63,25 +63,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tgl_daftar">Tanggal Daftar <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('tgl_daftar') is-invalid @enderror" id="tgl_daftar" name="tgl_daftar" value="{{ old('tgl_daftar') }}" required>
+                                    <input type="text" class="form-control @error('tgl_daftar') is-invalid @enderror" id="tgl_daftar" name="tgl_daftar" value="{{ old('tgl_daftar') }}" required autocomplete="off" placeholder="Masukkan tanggal daftar">
                                     @error('tgl_daftar')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="alamat">Alamat <span class="text-danger">*</span></label>
-                                    <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" required>{{ old('alamat') }}</textarea>
+                                    <textarea placeholder="Jl. Pelanggan Setia" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" required>{{ old('alamat') }} </textarea>
                                     @error('alamat')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">Status <span class="text-danger">*</span></label>
-                                    <select class="form-control @error('status') is-invalid @enderror" id="status" name="status" required>
-                                        <option value="Aktif">Aktif</option>
-                                        <option value="Tidak Aktif">Tidak Aktif</option>
-                                    </select>
-                                    @error('status')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -125,11 +115,6 @@
             });
 
             if (!isValid) {
-                Swal.fire({
-                    title: "Validation Error",
-                    text: "Please fill in all required fields.",
-                    icon: "error"
-                });
                 return;
             }
 

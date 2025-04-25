@@ -30,7 +30,7 @@ class PelangganController extends Controller
             'alamat' => 'required|max:255',
             'tgl_daftar' => 'required|date',
             'jenis_kelamin' => 'required|in:Pria,Wanita',
-            'status' => 'required|in:Aktif,Tidak Aktif',
+            // 'status' => 'required|in:Aktif,Tidak Aktif',
         ]);
 
         Pelanggan::create([
@@ -40,7 +40,7 @@ class PelangganController extends Controller
             'alamat' => $request->alamat,
             'jenis_kelamin' => $request->jenis_kelamin,
             'tgl_daftar' => $request->tgl_daftar,
-            'status' => $request->status,
+            // 'status' => $request->status,
             'id_perusahaan' => Auth::user()->id_perusahaan,
         ]);
 
@@ -50,7 +50,7 @@ class PelangganController extends Controller
     public function edit($id)
     {
         $pelanggan = Pelanggan::where('id_perusahaan', Auth::user()->id_perusahaan)
-                              ->findOrFail($id);
+            ->findOrFail($id);
         return view('masterdata.pelanggan.edit', compact('pelanggan'));
     }
 
@@ -63,11 +63,11 @@ class PelangganController extends Controller
             'alamat' => 'required|max:255',
             'tgl_daftar' => 'required|date',
             'jenis_kelamin' => 'required|in:Pria,Wanita',
-            'status' => 'required|in:Aktif,Tidak Aktif',
+            // 'status' => 'required|in:Aktif,Tidak Aktif',
         ]);
 
         $pelanggan = Pelanggan::where('id_perusahaan', Auth::user()->id_perusahaan)
-                              ->findOrFail($id);
+            ->findOrFail($id);
 
         $pelanggan->update([
             'nama' => $request->nama,
@@ -76,7 +76,7 @@ class PelangganController extends Controller
             'alamat' => $request->alamat,
             'jenis_kelamin' => $request->jenis_kelamin,
             'tgl_daftar' => $request->tgl_daftar,
-            'status' => $request->status,
+            // 'status' => $request->status,
         ]);
 
         return redirect()->route('pelanggan.index')->with('success', 'Pelanggan updated successfully.');
@@ -85,9 +85,28 @@ class PelangganController extends Controller
     public function destroy($id)
     {
         $pelanggan = Pelanggan::where('id_perusahaan', Auth::user()->id_perusahaan)
-                              ->findOrFail($id);
+            ->findOrFail($id);
         $pelanggan->delete();
 
         return redirect()->route('pelanggan.index')->with('success', 'Pelanggan deleted successfully.');
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $pelanggan = Pelanggan::findOrFail($id);
+
+        // Validate the request
+        $request->validate([
+            'status' => 'required|in:Aktif,Tidak Aktif',
+        ]);
+
+        // Update the status
+        $pelanggan->status = $request->status;
+        $pelanggan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status pelanggan berhasil diperbarui',
+            'status' => $pelanggan->status
+        ]);
     }
 }

@@ -38,26 +38,39 @@
                                     <table id="simpletable" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                {{-- <th>no</th> --}}
-                                                <th>nama</th>
+                                                <th>Nama</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- <?php
-                                            $no = 1;
-                                            ?> --}}
-                                            @foreach ($kategori_barangs as $Kategori)
+                                            @foreach ($kategori_barangs as $kategori)
                                                 <tr>
-                                                    {{-- <td>{{$no++}}</td> --}}
-                                                    <td>{{ $Kategori->nama }}</td>
+                                                    <td>{{ $kategori->nama }}</td>
                                                     <td>
-                                                        <a href="{{ route('kategori-produk.edit', $Kategori->id_kategori_barang) }}"
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="custom-control custom-switch mr-3">
+                                                                <input type="checkbox" class="custom-control-input status-switch" 
+                                                                    id="statusSwitch{{ $kategori->id_kategori_barang }}" 
+                                                                    data-id="{{ $kategori->id_kategori_barang }}"
+                                                                    data-product-count="{{ $kategori->produk_count }}"
+                                                                    {{ $kategori->status === 'Aktif' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" 
+                                                                    for="statusSwitch{{ $kategori->id_kategori_barang }}">
+                                                                </label>
+                                                            </div>
+                                                            <span class="badge {{ $kategori->status === 'Aktif' ? 'badge-success' : 'badge-danger' }}">
+                                                                {{ $kategori->status }}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('kategori-produk.edit', $kategori->id_kategori_barang) }}"
                                                             class="btn btn-info btn-sm"><i
                                                                 class="feather icon-edit"></i>&nbsp;Edit</a>
-                                                        <form id="delete-form-{{ $Kategori->id_kategori_barang }}"
-                                                            action="{{ route('kategori-produk.destroy', $Kategori->id_kategori_barang) }}"
-                                                            method="POST" style="display:inline;">
+                                                        <form id="delete-form-{{ $kategori->id_kategori_barang }}"
+                                                            action="{{ route('kategori-produk.destroy', $kategori->id_kategori_barang) }}"
+                                                            method="POST" style="display:{{ $kategori->status === 'Aktif' ? 'none' : 'inline' }};">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger btn-sm">
@@ -80,6 +93,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Delete confirmation
             document.querySelectorAll('form[id^="delete-form-"]').forEach(function (form) {
                 form.addEventListener('submit', function (e) {
                     e.preventDefault();
@@ -99,6 +113,132 @@
                     });
                 });
             });
+
+            // Status switch functionality
+            document.querySelectorAll('.status-switch').forEach(function(switchEl) {
+                switchEl.addEventListener('change', function() {
+                    const kategoriId = this.getAttribute('data-id');
+                    const isChecked = this.checked;
+                    const productCount = parseInt(this.getAttribute('data-product-count') || 0);
+                    
+                    // If deactivating and there are products, show warning
+                    if (!isChecked && productCount > 0) {
+                        Swal.fire({
+                            title: 'Perhatian!',
+                            text: `Kategori ini memiliki ${productCount} produk terkait. Menonaktifkan kategori ini akan menonaktifkan semua produk terkait. Lanjutkan?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya, nonaktifkan!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                updateKategoriStatus(kategoriId, isChecked, this);
+                            } else {
+                                // Revert the switch if user cancels
+                                this.checked = !isChecked;
+                            }
+                        });
+                    } else {
+                        // If activating or no products, proceed without warning
+                        updateKategoriStatus(kategoriId, isChecked, this);
+                    }
+                });
+            });
+
+            function updateKategoriStatus(kategoriId, isChecked, switchElement) {
+                // Show loading indicator
+                Swal.fire({
+                    title: 'Memproses...',
+                    text: 'Sedang mengubah status kategori',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Send AJAX request to update status
+                fetch(`/kategori-produk/${kategoriId}/update-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        status: isChecked ? 'Aktif' : 'Tidak Aktif'
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Update the badge
+                    const badgeContainer = switchElement.closest('td').querySelector('.badge');
+                    if (isChecked) {
+                        badgeContainer.className = 'badge badge-success';
+                        badgeContainer.textContent = 'Aktif';
+                        
+                        // Hide delete button if status is Aktif
+                        const row = switchElement.closest('tr');
+                        const deleteForm = row.querySelector(`form[id^="delete-form-"]`);
+                        if (deleteForm) {
+                            deleteForm.style.display = 'none';
+                        }
+                    } else {
+                        badgeContainer.className = 'badge badge-danger';
+                        badgeContainer.textContent = 'Tidak Aktif';
+                        
+                        // Show delete button if status is Tidak Aktif
+                        const row = switchElement.closest('tr');
+                        const deleteForm = row.querySelector(`form[id^="delete-form-"]`);
+                        if (deleteForm) {
+                            deleteForm.style.display = 'inline';
+                        }
+                    }
+                    
+                    // Show success message with affected products count
+                    let successMessage = `Status kategori berhasil diubah menjadi ${isChecked ? 'Aktif' : 'Tidak Aktif'}`;
+                    if (data.affected_products > 0) {
+                        successMessage += `. ${data.affected_products} produk terkait juga telah diperbarui.`;
+                    }
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: successMessage,
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    
+                    // Revert the switch to its previous state
+                    switchElement.checked = !isChecked;
+                    
+                    // Show error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Terjadi kesalahan saat mengubah status kategori.',
+                    });
+                });
+            }
+
+            // Check for success message in session and show SweetAlert
+            @if (session('success'))
+                Swal.fire({
+                    title: "Success!",
+                    text: "{{ session('success') }}",
+                    icon: "success",
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            @endif
         });
     </script>
 @endsection

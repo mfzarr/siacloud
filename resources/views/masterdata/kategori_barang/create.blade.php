@@ -30,8 +30,8 @@
                             <form id="kategoriForm" action="{{ route('kategori-produk.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="nama">Nama <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" required>
+                                    <label for="nama">Nama Kategori <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" required placeholder="Makanan Ringan">
                                     @error('nama')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -65,11 +65,6 @@
             });
 
             if (!isValid) {
-                Swal.fire({
-                    title: "Validation Error",
-                    text: "Please fill in all required fields.",
-                    icon: "error"
-                });
                 return;
             }
 

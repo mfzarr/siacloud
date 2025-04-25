@@ -48,7 +48,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Nama Karyawan</th>
                                         <th>Status</th>
                                         <th>Jam Masuk</th>
                                     </tr>

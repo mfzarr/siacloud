@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('jenis_kelamin');
             $table->string('email')->nullable();
             $table->string('alamat');
-            $table->string('status');
+            $table->string('status')->default('Aktif');
             $table->string('nik');
             $table->uuid('id_jabatan');
             $table->foreignId('id_perusahaan');

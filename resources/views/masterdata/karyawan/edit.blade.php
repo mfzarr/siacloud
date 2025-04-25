@@ -111,7 +111,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="status">Status <span class="text-danger">*</span></label>
                                     <select class="form-control @error('status') is-invalid @enderror" id="status" name="status" required>
                                         <option value="aktif" {{ $karyawan->status == 'aktif' ? 'selected' : '' }}>Aktif
@@ -122,7 +122,7 @@
                                     @error('status')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 <div class="text-right">
                                     <button type="button" class="btn btn-primary" id="saveButton">Save</button>
                                     <a href="{{ route('pegawai.index') }}" class="btn btn-danger">Back</a>

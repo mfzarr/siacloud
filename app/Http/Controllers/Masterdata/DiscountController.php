@@ -33,7 +33,18 @@ class DiscountController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'min_transaksi' => 'required|integer|min:1|unique:discounts',
+            'min_transaksi' => [                'required',
+                'integer',
+                'min:1',
+                function ($attribute, $value, $fail) {
+                    $exists = Discount::where('min_transaksi', $value)
+                        ->where('id_perusahaan', Auth::user()->id_perusahaan)
+                        ->exists();
+                    if ($exists) {
+                        $fail('The minimum transaction value already exists. Please choose a different value.');
+                    }
+                },
+            ],
             'discount_percentage' => 'required|integer|min:1|max:100',
         ]);
         Discount::create([
@@ -50,14 +61,14 @@ class DiscountController extends Controller
     public function edit($id)
     {
         $discount = Discount::where('id_perusahaan', Auth::user()->id_perusahaan)
-                            ->findOrFail($id);
+            ->findOrFail($id);
         return view('masterdata.discount.edit', compact('discount'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$id_discount)
+    public function update(Request $request, $id_discount)
     {
         $request->validate([
             'min_transaksi' => 'required|integer|min:1|unique:discounts,min_transaksi,' . $id_discount . ',id_discount',
@@ -65,7 +76,7 @@ class DiscountController extends Controller
         ]);
 
         $discount = Discount::where('id_perusahaan', Auth::user()->id_perusahaan)
-                            ->findOrFail($id_discount);
+            ->findOrFail($id_discount);
         $discount->update([
             'min_transaksi' => $request->min_transaksi,
             'discount_percentage' => $request->discount_percentage,
@@ -79,8 +90,29 @@ class DiscountController extends Controller
     public function destroy($id_discount)
     {
         $discount = Discount::where('id_perusahaan', Auth::user()->id_perusahaan)
-                            ->findOrFail($id_discount);
+            ->findOrFail($id_discount);
         $discount->delete();
         return redirect()->route('diskon.index')->with('success', 'Discount deleted successfully.');
     }
+    /**
+     * Update the status of the specified discount.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Aktif,Tidak Aktif',
+        ]);
+
+        $discount = Discount::where('id_perusahaan', Auth::user()->id_perusahaan)
+            ->findOrFail($id);
+
+        $discount->status = $request->status;
+        $discount->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status diskon berhasil diperbarui',
+            'status' => $discount->status
+        ]);
+    } 
 }

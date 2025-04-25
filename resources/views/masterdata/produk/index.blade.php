@@ -11,9 +11,10 @@
                                 <h5 class="m-b-10">List of Produk</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i
+                                            class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ route('produk.index') }}">Produk</a></li>
-                            </ul> 
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -84,11 +85,22 @@
                                                         <td class="align-middle">
                                                             Rp{{ number_format($produk->hpp, 0, ',', '.') }}</td>
                                                         <td class="align-middle">
-                                                            @if ($produk->status === 'Aktif')
-                                                                <span class="badge badge-success">Aktif</span>
-                                                            @else
-                                                                <span class="badge badge-danger">Tidak Aktif</span>
-                                                            @endif
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="custom-control custom-switch mr-0">
+                                                                    <input type="checkbox"
+                                                                        class="custom-control-input status-switch"
+                                                                        id="statusSwitch{{ $produk->id_produk }}"
+                                                                        data-id="{{ $produk->id_produk }}"
+                                                                        {{ $produk->status === 'Aktif' ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label"
+                                                                        for="statusSwitch{{ $produk->id_produk }}"></label>
+                                                                </div>
+                                                                @if ($produk->status === 'Aktif')
+                                                                    <span class="badge badge-success">Aktif</span>
+                                                                @else
+                                                                    <span class="badge badge-danger">Tidak Aktif</span>
+                                                                @endif
+                                                            </div>
                                                         </td>
                                                         <td>
                                                             <a href="{{ route('produk.edit', $produk->id_produk) }}"
@@ -97,7 +109,8 @@
                                                             </a>
                                                             <form id="delete-form-{{ $produk->id_produk }}"
                                                                 action="{{ route('produk.destroy', $produk->id_produk) }}"
-                                                                method="POST" style="display:inline;">
+                                                                method="POST"
+                                                                style="display:{{ $produk->status === 'Aktif' ? 'none' : 'inline' }};">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-danger btn-sm">
@@ -118,9 +131,10 @@
             </div>
         </div>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('form[id^="delete-form-"]').forEach(function (form) {
-                    form.addEventListener('submit', function (e) {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Delete confirmation
+                document.querySelectorAll('form[id^="delete-form-"]').forEach(function(form) {
+                    form.addEventListener('submit', function(e) {
                         e.preventDefault();
                         Swal.fire({
                             title: 'Hapus data ini?',
@@ -138,27 +152,112 @@
                         });
                     });
                 });
-            });
-            document.addEventListener('DOMContentLoaded', function() {
-                @if ($lowStockProduk->isNotEmpty())
-                    @foreach ($lowStockProduk as $item)
-                        $.notify({
-                            message: 'Stok Produk "{{ $item->nama }}" tersisa {{ $item->stok }}. Segera lakukan restock atau pembelian barang dagang!'
-                        }, {
-                            type: 'danger',
-                            placement: {
-                                from: 'top',
-                                align: 'right'
-                            },
-                            delay: 3000,
-                            timer: 2000,
-                            animate: {
-                                enter: 'animated fadeInRight',
-                                exit: 'animated fadeOutRight'
+
+                // Status switch functionality
+                document.querySelectorAll('.status-switch').forEach(function(switchEl) {
+                    switchEl.addEventListener('change', function() {
+                        const produkId = this.getAttribute('data-id');
+                        const isChecked = this.checked;
+                        const badgeContainer = this.closest('td').querySelector('.badge');
+
+                        // Show loading indicator
+                        Swal.fire({
+                            title: 'Memproses...',
+                            text: 'Sedang mengubah status produk',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
                             }
                         });
-                    @endforeach
+
+                        // Send AJAX request to update status
+                        fetch(`/produk/${produkId}/update-status`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').getAttribute('content')
+                                },
+                                body: JSON.stringify({
+                                    status: isChecked ? 'Aktif' : 'Tidak Aktif'
+                                })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // Update the badge
+                                if (isChecked) {
+                                    badgeContainer.className = 'badge badge-success';
+                                    badgeContainer.textContent = 'Aktif';
+
+                                    // Hide delete button if status is Aktif
+                                    const row = this.closest('tr');
+                                    const deleteForm = row.querySelector(
+                                    `form[id^="delete-form-"]`);
+                                    if (deleteForm) {
+                                        deleteForm.style.display = 'none';
+                                    }
+                                } else {
+                                    badgeContainer.className = 'badge badge-danger';
+                                    badgeContainer.textContent = 'Tidak Aktif';
+
+                                    // Show delete button if status is Tidak Aktif
+                                    const row = this.closest('tr');
+                                    const deleteForm = row.querySelector(
+                                    `form[id^="delete-form-"]`);
+                                    if (deleteForm) {
+                                        deleteForm.style.display = 'inline';
+                                    }
+                                }
+
+                                // Show success message
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: `Status produk berhasil diubah menjadi ${isChecked ? 'Aktif' : 'Tidak Aktif'}`,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+
+                                // Revert the switch to its previous state
+                                this.checked = !isChecked;
+
+                                // Show error message
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: 'Terjadi kesalahan saat mengubah status produk'
+                                });
+                            });
+                    });
+                });
+
+                // Low stock notifications
+                @if ($lowStockProduk->isNotEmpty())
+                    Swal.fire({
+                        title: 'Peringatan Stok Rendah',
+                        html: `
+                            <div class="text-left">
+                                <p>Beberapa produk memiliki stok yang rendah:</p>
+                                <ul>
+                                    @foreach ($lowStockProduk as $produk)
+                                        <li><strong>{{ $produk->nama }}</strong>: {{ $produk->stok }} tersisa</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        `,
+                        icon: 'warning',
+                        confirmButtonText: 'Saya Mengerti'
+                    });
                 @endif
             });
         </script>
-    @endsection
+    </div>
+@endsection

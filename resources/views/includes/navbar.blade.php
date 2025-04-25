@@ -44,7 +44,7 @@
                 @if(Auth::check() && Auth::user()->role === 'owner')
                 <li class="nav-item">
                     <a href="{{ route('perusahaan.index') }}" class="nav-link ">
-                        <span class="pcoded-micon"><i class="feather icon-home"></i></span>
+                        <span class="pcoded-micon"><i class="feather icon-info"></i></span>
                         <span class="pcoded-mtext">Tentang Perusahaan</span>
                     </a>    
                 </li>

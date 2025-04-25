@@ -7,6 +7,7 @@
 </head>
 
 <body class="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">

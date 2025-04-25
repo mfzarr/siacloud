@@ -37,11 +37,11 @@ class JabatanController extends Controller
             'asuransi' => 'required|string',
             'tarif' => 'required|string',
         ]);
-    
+
         // Konversi input dari format ribuan menjadi angka murni
         $asuransi = str_replace('.', '', $request->asuransi);
         $tarif = str_replace('.', '', $request->tarif);
-    
+
         // Simpan data ke database
         Jabatan::create([
             'nama' => $request->nama,
@@ -49,7 +49,7 @@ class JabatanController extends Controller
             'tarif' => $tarif,
             'id_perusahaan' => Auth::user()->id_perusahaan,
         ]);
-    
+
         return redirect()->route('jabatan.index')->with('success', 'Jabatan created successfully.');
     }
 
@@ -73,22 +73,22 @@ class JabatanController extends Controller
             'asuransi' => 'required|string',
             'tarif' => 'required|string',
         ]);
-    
+
         // Konversi input dari format ribuan menjadi angka murni
         $asuransi = str_replace('.', '', $request->asuransi);
         $tarif = str_replace('.', '', $request->tarif);
-    
+
         // Ambil data jabatan berdasarkan perusahaan
         $jabatan = Jabatan::where('id_perusahaan', Auth::user()->id_perusahaan)
             ->findOrFail($id);
-    
+
         // Update data di database
         $jabatan->update([
             'nama' => $request->nama,
             'asuransi' => $asuransi,
             'tarif' => $tarif,
         ]);
-    
+
         return redirect()->route('jabatan.index')->with('success', 'Jabatan updated successfully.');
     }
     /**
@@ -101,5 +101,26 @@ class JabatanController extends Controller
         $jabatan->delete();
 
         return redirect()->route('jabatan.index')->with('success', 'Jabatan deleted successfully.');
+    }
+    /**
+     * Update the status of the specified jabatan.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Aktif,Tidak Aktif',
+        ]);
+
+        $jabatan = Jabatan::where('id_perusahaan', Auth::user()->id_perusahaan)
+            ->findOrFail($id);
+
+        $jabatan->status = $request->status;
+        $jabatan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status jabatan berhasil diperbarui',
+            'status' => $jabatan->status
+        ]);
     }
 }
